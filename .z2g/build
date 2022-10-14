@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -e
+
+zip_id="$(git remote get-url origin | sed -E 's/^https:\/\/(.+)@.+$/\1/')"
+zip_url="https://playground.altk.org/z2g/$zip_id.zip"
+zip_file="data.zip"
+wd=".z2g"
+root="$(pwd)"
+datadir="data"
+
+rm Makefile
+
+cd "$wd"
+mkdir "$datadir"
+
+wget "$zip_url" -O "$zip_file"
+python3 -m zipfile -e "$zip_file" "$datadir"
+
+cd "$datadir"
+contents="$(ls -A)"
+if [ "$(wc -l <<< "$contents")" -eq 1 -a -d "$contents" ]; then
+  cd "$contents"
+  contents="$(ls -A)"
+fi
+
+mv $contents "$root"
+cd "$root"
+
+[ -e CMakeLists.txt ] && cmake .
+[ -e Makefile ] && make
