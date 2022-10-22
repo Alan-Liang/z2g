@@ -24,6 +24,9 @@ if [ "$(wc -l <<< "$contents")" -eq 1 -a -d "$contents" ]; then
   contents="$(ls -A)"
 fi
 
+[ -e .git ] && rm -rf .git
+contents="$(ls -A)"
+
 mv $contents "$root"
 cd "$root"
 
