@@ -27,6 +27,7 @@ fi
 [ -e .git ] && rm -rf .git
 contents="$(ls -A)"
 
+IFS=$'\n'
 mv $contents "$root"
 cd "$root"
 
